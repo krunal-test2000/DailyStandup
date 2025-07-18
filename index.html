@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>REXT Team Stand Up</title>
+  <link href="https://fonts.googleapis.com/css2?family=Luckiest+Guy&display=swap" rel="stylesheet">
+
+  <style>
+    /* Blurred background */
+    #bg {
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background-image: url('images/default.png');
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      filter: blur(8px);
+      z-index: -1;
+    }
+
+    body {
+      font-family: 'Luckiest Guy', cursive;
+      text-align: center;
+      padding-top: 50px;
+      margin: 0;
+      overflow-x: hidden;
+      color: #333;
+      text-shadow: 1px 1px 2px #fff;
+    }
+
+    h1 {
+      font-size: 3.2rem;
+      color: #b570ff;
+      text-shadow: 1px 1px #fff;
+      letter-spacing: 4px;
+      background-color: rgba(0, 0, 0, 0.6);
+      display: inline-block;
+      padding: 10px 20px;
+      border-radius: 12px;
+      margin-bottom: 10px;
+    }
+
+    p {
+      font-size: 1.5rem;
+      color: #444;
+      margin-top: 5px;
+      margin-bottom: 30px;
+      text-shadow: 1px 1px 3px rgba(255,255,255,0.8);
+    }
+
+    /* Container with image on left, button on right */
+    #container {
+      display: flex;
+      align-items: center;       /* vertical center */
+      justify-content: center;
+      gap: 30px;
+      margin-top: 20px;
+    }
+
+    #nextBtn {
+      padding: 16px 30px;
+      font-size: 22px;
+      font-family: 'Luckiest Guy', cursive;
+      background: linear-gradient(to right, #00c6ff, #0072ff);
+      color: white;
+      border: none;
+      border-radius: 12px;
+      cursor: pointer;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      flex-shrink: 0;
+    }
+
+    #nextBtn:hover {
+      transform: scale(1.1);
+      box-shadow: 0 6px 25px rgba(0, 0, 0, 0.3);
+    }
+
+    #imageCounterWrapper {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 15px;
+    }
+
+    #teamPic {
+      width: 500px;
+      height: auto;
+      border: 10px solid #fff;
+      border-radius: 30px;
+      box-shadow: 0 8px 30px rgba(0,0,0,0.3);
+      margin-top: 0;
+      animation: zoomInSwing 1s ease-in-out;
+      background: transparent;
+      position: relative;
+      z-index: 1;
+    }
+
+    @keyframes zoomInSwing {
+      0% { transform: scale(0.7) rotate(0deg); opacity: 0; }
+      30% { transform: scale(1.05) rotate(5deg); opacity: 1; }
+      60% { transform: scale(0.95) rotate(-5deg); }
+      80% { transform: scale(1.02) rotate(3deg); }
+      100% { transform: scale(1) rotate(0deg); }
+    }
+
+    #counter {
+      background: rgba(0,0,0,0.6);
+      color: white;
+      font-size: 22px;
+      padding: 8px 18px;
+      border-radius: 10px;
+      font-family: Arial, sans-serif;
+      text-align: center;
+      min-width: 130px;
+      text-shadow: none;
+      position: relative;
+      z-index: 1;
+    }
+  </style>
+</head>
+<body>
+
+  <div id="bg"></div>
+
+  <h1>🎬 REXT Team Stand Up 🎬</h1>
+  <p>Stand up time! Let’s get the standup started!</p>
+
+  <div id="container">
+    <div id="imageCounterWrapper">
+      <img id="teamPic" src="images/default.png" alt="Team Member" />
+      <div id="counter">0 done of 14</div>
+    </div>
+
+    <button id="nextBtn" onclick="pickRandom()">🔁 Who's Next?</button>
+  </div>
+
+  <script>
+    const totalImages = 14;
+    const productTeamImageNumber = 14;  // product team image always last
+    /* const imageFolder = 'Photo/';   */   // for with photos
+    const imageFolder = 'images/';
+    let remaining = [];
+
+    for (let i = 1; i < productTeamImageNumber; i++) {
+      remaining.push(i);
+    }
+
+    function pickRandom() {
+      if (remaining.length === 0) {
+        const image = document.getElementById('teamPic');
+        image.src = `${imageFolder}${productTeamImageNumber}.png`;
+
+        image.style.animation = 'none';
+        void image.offsetWidth;
+        image.style.animation = 'zoomInSwing 1s ease-in-out';
+
+        document.getElementById('counter').textContent = `✅ All ${totalImages} done!`;
+        alert("Everyone is done, Excluding the Product Team! 🎉");
+        return;
+      }
+
+      const index = Math.floor(Math.random() * remaining.length);
+      const number = remaining.splice(index, 1)[0];
+      const imagePath = `${imageFolder}${number}.png`;
+
+      const image = document.getElementById('teamPic');
+      image.src = imagePath;
+
+      image.style.animation = 'none';
+      void image.offsetWidth;
+      image.style.animation = 'zoomInSwing 1s ease-in-out';
+
+      document.getElementById('counter').textContent =
+        `${totalImages - remaining.length - 1} done of ${totalImages}`;
+    }
+
+    window.onload = function () {
+      document.getElementById('teamPic').src = `${imageFolder}default.png`;
+      document.getElementById('counter').textContent = `0 done of ${totalImages}`;
+    };
+  </script>
+
+</body>
+</html>
